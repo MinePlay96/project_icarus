@@ -2,12 +2,25 @@ version: "3"
 services:
   node:
     image: "node:alpine"
+    restart: always
     user: "node"
     working_dir: /home/node/app
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_USER: ${DB_USER:-postgres}
+      DB: ${DB:-${DB_USER:-postgres}}
     volumes:
       - ./:/home/node/app
     ports:
       - "${WEBSERVER_PORT:-8080}:3000"
-    command: "npm start"
+    command: "npm run start:dev"
+  db:
+    image: postgres:alpine
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_DB: ${DB_NAME:-${DB_USER:-postgres}}
