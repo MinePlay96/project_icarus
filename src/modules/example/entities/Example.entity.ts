@@ -10,7 +10,4 @@ export class Example {
 
   @Column()
   public description: string;
-
-  @Column()
-  public customers: Array<Customer>
 }

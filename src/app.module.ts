@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExampleModule } from './modules/example/example.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -14,6 +15,9 @@ import databaseConfig from './config/database.config';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
         configService.get('database'),
+    }),
+    EventEmitterModule.forRoot({
+      wildcard: true,
     }),
     ExampleModule,
   ],

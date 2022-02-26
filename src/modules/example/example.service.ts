@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { event } from 'eventemitter2';
 import { Repository } from 'typeorm';
 import { CreateExampleDto } from './dto/create-example.dto';
 import { UpdateExampleDto } from './dto/update-example.dto';
@@ -10,6 +12,7 @@ export class ExampleService {
   constructor(
     @InjectRepository(Example)
     private exampleRepository: Repository<Example>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   create(createExampleDto: CreateExampleDto): Promise<Example> {
@@ -18,7 +21,16 @@ export class ExampleService {
   }
 
   findAll(): Promise<Array<Example>> {
+    const event = this.eventEmitter.emitAsync('example.findAll', { number: 3 });
+    console.log(event);
     return this.exampleRepository.find();
+  }
+
+  @OnEvent('example.findAll')
+  async onEvent(payload: { number }, event: event) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    console.log(payload);
+    return false;
   }
 
   findOne(id: string): Promise<Example> {
