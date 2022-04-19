@@ -21,7 +21,7 @@ export class ExampleService {
   }
 
   findAll(): Promise<Array<Example>> {
-    const event = this.eventEmitter.emitAsync('example.findAll', { number: 3 });
+    const event = this.eventEmitter.emitAsync('example.findAll');
     console.log(event);
     return this.exampleRepository.find();
   }

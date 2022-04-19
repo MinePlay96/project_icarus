@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExampleModule } from './modules/example/example.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -20,6 +22,8 @@ import databaseConfig from './config/database.config';
       wildcard: true,
     }),
     ExampleModule,
+    AuthModule,
+    UserModule,
   ],
 })
 export class AppModule {}
