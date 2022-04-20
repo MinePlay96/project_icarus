@@ -1,10 +1,8 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
-import { AuthValidateSuccessEvent } from '../auth/events/auth-validate-success.event';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -37,6 +35,12 @@ export class UserService {
 
   public findOne(uuid: string): Promise<User> {
     return this.userRepository.findOneOrFail(uuid);
+  }
+
+  public findOneWithPermissions(uuid: string): Promise<User> {
+    return this.userRepository.findOneOrFail(uuid, {
+      relations: ['permissions'],
+    });
   }
 
   public findOneByEmail(email: string): Promise<User | null> {

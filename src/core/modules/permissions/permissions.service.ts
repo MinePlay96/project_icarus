@@ -1,26 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotImplementedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
+import { Permission } from './entities/permission.entity';
 
 @Injectable()
 export class PermissionsService {
-  create(createPermissionDto: CreatePermissionDto) {
-    return 'This action adds a new permission';
+  constructor(
+    @InjectRepository(Permission)
+    private readonly permissionRepository: Repository<Permission>,
+  ) {}
+
+  public create(createPermissionDto: CreatePermissionDto) {
+    throw new NotImplementedException();
   }
 
-  findAll() {
-    return `This action returns all permissions`;
+  public findAll() {
+    return this.permissionRepository.find();
   }
 
-  findOne(uuid: string) {
-    return `This action returns a #${uuid} permission`;
+  public findOne(name: string) {
+    return this.permissionRepository.findOne();
   }
 
-  update(uuid: string, updatePermissionDto: UpdatePermissionDto) {
-    return `This action updates a #${uuid} permission`;
+  public update(name: string, updatePermissionDto: UpdatePermissionDto) {
+    throw new NotImplementedException();
   }
 
-  remove(uuid: string) {
-    return `This action removes a #${uuid} permission`;
+  public remove(name: string) {
+    throw new NotImplementedException();
   }
 }
