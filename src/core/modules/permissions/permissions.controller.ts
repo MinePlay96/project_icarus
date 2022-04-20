@@ -17,18 +17,18 @@ export class PermissionsController {
     return this.permissionsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.permissionsService.findOne(+id);
+  @Get(':uuid')
+  findOne(@Param('uuid') uuid: string) {
+    return this.permissionsService.findOne(uuid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePermissionDto: UpdatePermissionDto) {
-    return this.permissionsService.update(+id, updatePermissionDto);
+  @Patch(':uuid')
+  update(@Param('uuid') uuid: string, @Body() updatePermissionDto: UpdatePermissionDto) {
+    return this.permissionsService.update(uuid, updatePermissionDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.permissionsService.remove(+id);
+  @Delete(':uuid')
+  remove(@Param('uuid') uuid: string) {
+    return this.permissionsService.remove(uuid);
   }
 }

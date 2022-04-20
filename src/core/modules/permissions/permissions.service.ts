@@ -12,15 +12,15 @@ export class PermissionsService {
     return `This action returns all permissions`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} permission`;
+  findOne(uuid: string) {
+    return `This action returns a #${uuid} permission`;
   }
 
-  update(id: number, updatePermissionDto: UpdatePermissionDto) {
-    return `This action updates a #${id} permission`;
+  update(uuid: string, updatePermissionDto: UpdatePermissionDto) {
+    return `This action updates a #${uuid} permission`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} permission`;
+  remove(uuid: string) {
+    return `This action removes a #${uuid} permission`;
   }
 }

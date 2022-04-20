@@ -1,9 +1,7 @@
-import { Inject, Injectable, NotAcceptableException } from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/core/modules/user/entities/user.entity';
 import { UserService } from 'src/core/modules/user/user.service';
-import { ConfigType } from '@nestjs/config';
-import authConfig from './auth.config';
 import { CreateUserDto } from 'src/core/modules/user/dto/create-user.dto';
 import { UserType } from 'src/core/modules/user/entities/user.type';
 
@@ -12,8 +10,6 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-    @Inject(authConfig.KEY)
-    private readonly config: ConfigType<typeof authConfig>,
   ) {}
 
   async validateUser(
