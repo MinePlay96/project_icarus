@@ -5,9 +5,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Permission } from '../../permissions/entities/permission.entity';
 
 @Entity()
 export class User {
@@ -35,6 +38,10 @@ export class User {
 
   @DeleteDateColumn()
   public deleteAt: Date;
+
+  @ManyToMany(() => Permission)
+  @JoinTable()
+  public permissions: Permission[];
 
   @BeforeInsert()
   protected emailToLowerCase() {

@@ -38,7 +38,11 @@ export class UserService {
     return this.userRepository.findOneOrFail(id);
   }
 
-  findOneByEmail(email: string): Promise<User> {
+  findOneByEmail(email: string): Promise<User | null> {
+    return this.findOneByEmailOrFail(email).catch(() => null);
+  }
+
+  findOneByEmailOrFail(email: string): Promise<User> {
     return this.userRepository.findOneOrFail({ email });
   }
 

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotAcceptableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/core/modules/user/entities/user.entity';
 import { UserService } from 'src/core/modules/user/user.service';
@@ -20,14 +20,18 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<null | UserType> {
-    const user = await this.userService.findOneByEmail(email);
-    const match = await this.userService.comparePassword(user, password);
+    try {
+      const user = await this.userService.findOneByEmailOrFail(email);
+      const match = await this.userService.comparePassword(user, password);
 
-    if (user && match) {
+      if (!match) {
+        throw new NotAcceptableException('Invalid credentials');
+      }
+
       return user;
+    } catch (error) {
+      return null;
     }
-
-    return null;
   }
 
   async login(user: User) {
