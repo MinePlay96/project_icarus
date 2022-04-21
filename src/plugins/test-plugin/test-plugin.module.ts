@@ -4,6 +4,6 @@ import { TestPluginController } from './test-plugin.controller';
 
 @Module({
   controllers: [TestPluginController],
-  providers: [TestPluginService]
+  providers: [TestPluginService],
 })
 export class TestPluginModule {}
