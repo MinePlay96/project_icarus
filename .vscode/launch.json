@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Local: Debug",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "start:debug"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "type": "node"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "restart": true,
+            "name": "Docker: Debug",
+            "remoteRoot": "/home/node/app",
+            "localRoot": "${workspaceFolder}",
+            "preLaunchTask": "Run docker-compose up:dev",
+            "port": 9229
+        }
+    ]
+}

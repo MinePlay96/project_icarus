@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run docker-compose up:prod",
+            "type": "docker-compose",
+            "dockerCompose": {
+                "projectName": "project-icarus",
+                "up": {
+                    "detached": true,
+                    "build": true
+                },
+                "files": [
+                    "${workspaceFolder}/docker-compose.yml"
+                ]
+            }
+        },
+        {
+            "label": "Run docker-compose up:dev",
+            "command": "docker-compose",
+            "args": [
+                "-f",
+                "${workspaceFolder}/docker-compose.dev.yml",
+                "up",
+            ],
+            "isBackground": true,
+            "problemMatcher": "$tsc-watch"
+        },
+    ]
+}
