@@ -24,12 +24,6 @@ export class User {
   @Column()
   public password: string;
 
-  @Column()
-  public firstName: string;
-
-  @Column()
-  public lastName: string;
-
   @CreateDateColumn()
   public createdAt: Date;
 
