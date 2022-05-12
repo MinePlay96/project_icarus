@@ -4,12 +4,14 @@ import { User } from 'src/core/modules/user/entities/user.entity';
 import { UserService } from 'src/core/modules/user/user.service';
 import { CreateUserDto } from 'src/core/modules/user/dto/create-user.dto';
 import { UserType } from 'src/core/modules/user/entities/user.type';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async validateUser(
@@ -17,11 +19,23 @@ export class AuthService {
     password: string,
   ): Promise<null | UserType> {
     try {
-      const user = await this.userService.findOneByEmailOrFail(email);
-      const match = await this.userService.comparePasswordWithHash(
-        user.password,
+      const test = await this.eventEmitter.emitAsync('userprovider.validate', {
+        email,
         password,
-      );
+      });
+
+      console.log(test);
+      const user = await this.userService.findOneByEmailOrFail(email);
+
+      let match = false;
+
+      if (!test.length) {
+        // no providers use local fallback
+        match = await this.userService.comparePasswordWithHash(
+          user.password,
+          password,
+        );
+      }
 
       if (!match) {
         throw new NotAcceptableException('Invalid credentials');
@@ -42,5 +56,12 @@ export class AuthService {
 
   async register(user: CreateUserDto): Promise<UserType> {
     return await this.userService.create(user);
+  }
+
+//  async localUserProvider()
+  @OnEvent('userprovider.validate')
+  async onUserProviderValidate({ email, password }) {
+    console.log('userprovider.validate');
+    return true;
   }
 }

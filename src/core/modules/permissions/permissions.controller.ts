@@ -10,7 +10,6 @@ import {
 import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
-import { Permission } from './permission.decorator';
 
 @Controller('permissions')
 export class PermissionsController {
@@ -22,7 +21,6 @@ export class PermissionsController {
   }
 
   @Get()
-  @Permission('permissions.findAll')
   findAll() {
     return this.permissionsService.findAll();
   }
