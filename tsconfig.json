@@ -16,6 +16,14 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@project-icarus/permissions": [
+        "src/core/modules/permissions"
+      ],
+      "@project-icarus/auth": [
+        "src/core/modules/auth"
+      ],
+    }
   }
 }

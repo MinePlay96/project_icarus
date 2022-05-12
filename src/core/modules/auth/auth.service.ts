@@ -18,7 +18,10 @@ export class AuthService {
   ): Promise<null | UserType> {
     try {
       const user = await this.userService.findOneByEmailOrFail(email);
-      const match = await this.userService.comparePassword(user, password);
+      const match = await this.userService.comparePasswordWithHash(
+        user.password,
+        password,
+      );
 
       if (!match) {
         throw new NotAcceptableException('Invalid credentials');

@@ -1,8 +1,14 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { compare, genSalt, hash } from 'bcrypt';
-import { Repository } from 'typeorm';
+import { EntityNotFoundError, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -33,8 +39,16 @@ export class UserService {
     return this.userRepository.find();
   }
 
-  public findOne(uuid: string): Promise<User> {
-    return this.userRepository.findOneOrFail(uuid);
+  public async findOne(uuid: string): Promise<User> {
+    try {
+      return await this.userRepository.findOneOrFail(uuid);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new NotFoundException('User not found');
+      }
+
+      throw new InternalServerErrorException(error);
+    }
   }
 
   public findOneWithPermissions(uuid: string): Promise<User> {
@@ -55,6 +69,10 @@ export class UserService {
     uuid: string,
     updateUserDto: UpdateUserDto,
   ): Promise<User> {
+    if (Object.keys(updateUserDto).length === 0) {
+      throw new BadRequestException('No data to update');
+    }
+
     const user = await this.findOne(uuid);
 
     Object.keys(updateUserDto).forEach((key) => {
@@ -64,12 +82,26 @@ export class UserService {
     return this.userRepository.save(user);
   }
 
-  public remove(uuid: string) {
-    return this.userRepository.delete(uuid);
+  public async remove(uuid: string): Promise<boolean> {
+    const user = await this.findOne(uuid);
+    try {
+      await this.userRepository.delete(user);
+    } catch (error) {
+      if (error instanceof EntityNotFoundError) {
+        throw new NotFoundException('User not found');
+      }
+
+      throw new InternalServerErrorException(error);
+    }
+
+    return true;
   }
 
-  public comparePassword(user: User, password: string): Promise<boolean> {
-    return compare(password, user.password);
+  public comparePasswordWithHash(
+    hash: string,
+    password: string,
+  ): Promise<boolean> {
+    return compare(password, hash);
   }
 
   public async hashPassword(password: string): Promise<string> {
