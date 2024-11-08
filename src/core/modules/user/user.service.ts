@@ -41,7 +41,7 @@ export class UserService {
 
   public async findOne(uuid: string): Promise<User> {
     try {
-      return await this.userRepository.findOneOrFail(uuid);
+      return await this.userRepository.findOneByOrFail({ uuid });
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundException('User not found');
@@ -52,7 +52,8 @@ export class UserService {
   }
 
   public findOneWithPermissions(uuid: string): Promise<User> {
-    return this.userRepository.findOneOrFail(uuid, {
+    return this.userRepository.findOneOrFail({
+      where: { uuid },
       relations: ['permissions'],
     });
   }
@@ -62,7 +63,7 @@ export class UserService {
   }
 
   public findOneByEmailOrFail(email: string): Promise<User> {
-    return this.userRepository.findOneOrFail({ email });
+    return this.userRepository.findOneByOrFail({ email });
   }
 
   public async update(

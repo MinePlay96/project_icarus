@@ -21,7 +21,7 @@ export class PermissionsService {
   }
 
   public findOne(name: string) {
-    return this.permissionRepository.findOne();
+    return this.permissionRepository.findOne({ where: { name } });
   }
 
   public update(name: string, updatePermissionDto: UpdatePermissionDto) {

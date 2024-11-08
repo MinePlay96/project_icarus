@@ -34,7 +34,7 @@ export class ExampleService {
   }
 
   findOne(id: string): Promise<Example> {
-    return this.exampleRepository.findOneOrFail(id);
+    return this.exampleRepository.findOneByOrFail({ id });
   }
 
   async update(

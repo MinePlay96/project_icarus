@@ -19,23 +19,19 @@ export class AuthService {
     password: string,
   ): Promise<null | UserType> {
     try {
-      const test = await this.eventEmitter.emitAsync('userprovider.validate', {
-        email,
-        password,
-      });
+      // TODO: event driven auth
+      // const test = await this.eventEmitter.emitAsync('userprovider.validate', {
+      //   email,
+      //   password,
+      // });
 
-      console.log(test);
+      // console.log(test);
       const user = await this.userService.findOneByEmailOrFail(email);
 
-      let match = false;
-
-      if (!test.length) {
-        // no providers use local fallback
-        match = await this.userService.comparePasswordWithHash(
-          user.password,
-          password,
-        );
-      }
+      let match = await this.userService.comparePasswordWithHash(
+        user.password,
+        password,
+      );
 
       if (!match) {
         throw new NotAcceptableException('Invalid credentials');
@@ -58,10 +54,9 @@ export class AuthService {
     return await this.userService.create(user);
   }
 
-//  async localUserProvider()
-  @OnEvent('userprovider.validate')
-  async onUserProviderValidate({ email, password }) {
-    console.log('userprovider.validate');
-    return true;
-  }
+  // @OnEvent('userprovider.validate')
+  // async localUserAuthProvider({ email, password }) {
+  //   return this.localUserAuthProvider(email, password);
+  // }
+
 }

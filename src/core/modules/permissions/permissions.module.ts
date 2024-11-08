@@ -11,10 +11,10 @@ import { APP_GUARD } from '@nestjs/core';
   controllers: [PermissionsController],
   providers: [
     PermissionsService,
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PermissionGuard,
+    // },
   ],
 })
 export class PermissionsModule {}
